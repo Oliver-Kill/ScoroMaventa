@@ -1,0 +1,17 @@
+{
+  "require": {
+    "phpmailer/phpmailer": "^6.0",
+    "ext-mysqli": "*",
+    "stichoza/google-translate-php": "^4.1",
+    "ezyang/htmlpurifier": "^4.13",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": [
+        "system/classes/",
+        "classes/App"
+      ]
+    }
+  }
+}
