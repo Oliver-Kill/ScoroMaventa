@@ -136,7 +136,9 @@ function debug($message)
 {
     $data = date('[H:i:s] ') . $message;
     file_put_contents('.debug/debug.log', $data."\n", FILE_APPEND);
-    echo inCli() ? $data : "<pre>".htmlentities($data)."</pre>"."\n";
+    if (SHOW_DEBUGGING_MESSAGES) {
+        echo inCli() ? $data : "<pre>" . htmlentities($data) . "</pre>" . "\n";
+    }
 }
 function inCli(): bool
 {

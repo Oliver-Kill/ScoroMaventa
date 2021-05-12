@@ -55,7 +55,11 @@ function ajax(url, options, callback_or_redirect_url, error_callback) {
                     javascript_received_json_payload_that_caused_the_error: response
                 });
 
-                show_error_modal(response);
+                if (typeof error_callback === 'function') {
+                    error_callback(response);
+                } else {
+                    show_error_modal(response);
+                }
 
                 return false;
 

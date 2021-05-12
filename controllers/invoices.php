@@ -42,6 +42,7 @@ class invoices extends Controller
         //file_put_contents('.debug/testInvoice.json', json_encode($invoiceData));
         //$invoiceData = json_decode(file_get_contents('.debug/testInvoice.json'));
         Invoice::send($invoiceData);
+        stop(200, 'Successfully sent e-invoice');
 
     }
 

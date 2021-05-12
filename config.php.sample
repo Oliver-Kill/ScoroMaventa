@@ -8,27 +8,15 @@ define('DATABASE_HOSTNAME', '127.0.0.1');
 define('DATABASE_USERNAME', 'root');
 define('DATABASE_PASSWORD', '');
 define('DATABASE_DATABASE', 'halo');
-define('SMTP_AUTH_PASSWORD', '');
-define('SMTP_AUTH_USERNAME', '');
-define('SMTP_AUTH', false);
-define('SMTP_DEBUG', 0);
-define('SMTP_ENCRYPTION', 'none');
-define('SMTP_FROM', PROJECT_NAME . '@example.com');
-define('SMTP_HOST', 'localhost');
-define('SMTP_PORT', 1025); // 1025 - Mailhog, 25 - live
-define('SMTP_USE_SENDMAIL', false); // Send mail via system sendmail command or directly via SMTP
-define('SMTP_DKIM_ENABLED', false);
-define('SMTP_DKIM_DOMAIN', 'example.com');
-define('SMTP_DKIM_PRIVATE_KEY', '.certs/dkim_private_key.pem');
-define('SMTP_DKIM_SELECTOR', 'example');
-define('SMTP_DKIM_PASSPHRASE', '');
-define('SMTP_DKIM_IDENTITY', SMTP_FROM);
 
 // Make sure timestamps are correct
 date_default_timezone_set('Europe/Tallinn');
 
 // In which language you have translatable phrases in the code
 define('DEFAULT_LANGUAGE', 'en');
+
+// For debug
+const SHOW_DEBUGGING_MESSAGES = false;
 
 // Error reporting with Sentry
 const SENTRY_DSN = 'https://156fcb150a77475494af80a26fa7bab2@o585161.ingest.sentry.io/5737827';
@@ -42,7 +30,7 @@ const SELLER_BUSINESS_ID = '2542584-9';
 const SELLER_TAX_CODE = 'FI25425849';
 const SELLER_ORGANISATION_NAME = 'Print World Oy';
 const SELLER_ORGANISATION_OPERATOR_OVT = '003721291126';
-define('SELLER_ORGANISATION_OVT', '0037' . stripNonNumbers(SELLER_BUSINESS_ID));
+const SELLER_ORGANISATION_OVT = '003725425849';
 
 // MaventaAPI
 //const MAVENTA_BASE_URL = 'https://ax-stage.maventa.com/'; // Production: https://ax.maventa.com/
