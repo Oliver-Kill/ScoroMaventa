@@ -152,3 +152,31 @@ function disableHtmlErrorsWhenInCli()
         ini_set('html_errors', 0);
     }
 }
+
+function replaceAmpersandWithHtmlEntityRecursively(&$array)
+{
+    foreach ($array as $key => &$value) {
+
+        if (is_object($array)) {
+            if (is_object($array->$key) || is_array($array->$key)) {
+                $array->$key = replaceAmpersandWithHtmlEntityRecursively($array->$key);
+            } else {
+                $array->$key = str_replace('&', '&amp;', $value);
+            }
+
+        } elseif (is_array($array)) {
+            if (is_object($array[$key]) || is_array($array[$key])) {
+                $array[$key] = replaceAmpersandWithHtmlEntityRecursively($array[$key]);
+            } else {
+                $array[$key] = str_replace('&', '&amp;', $value);
+            }
+        }
+    }
+
+    return $array;
+}
+
+function stripNonNumbers($businessId): string
+{
+    return preg_replace('/[^\d]/', '', $businessId);
+}

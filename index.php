@@ -1,8 +1,9 @@
 <?php namespace App;
 
-// Init composer auto-loading
+use ScoroMaventa\Mail;
 use function Sentry\init;
 
+// Init composer auto-loading
 if (!@include_once("vendor/autoload.php")) {
 
     exit('Run composer install');
@@ -21,9 +22,20 @@ if (!include('config.php')) {
 }
 
 if (sentryDsnIsSet()) {
-    init(['dsn' => SENTRY_DSN]);
+    init([
+        'dsn' => SENTRY_DSN,
+        'environment' => SENTRY_ENVIRONMENT
+    ]);
 }
 
 
 // Load app
-$app = new Application;
+try {
+    $app = new Application;
+} catch (\Exception $e) {
+    debug("ERROR: " . $e->getMessage());
+    Application::sendExceptionToSentry($e);
+    debug("Sent error to Sentry");
+    Mail::send('Application error: ' . $e->getMessage(), json_encode($e));
+    exit();
+}

@@ -20,6 +20,7 @@ const SHOW_DEBUGGING_MESSAGES = false;
 
 // Error reporting with Sentry
 const SENTRY_DSN = 'https://156fcb150a77475494af80a26fa7bab2@o585161.ingest.sentry.io/5737827';
+define('SENTRY_ENVIRONMENT', php_uname('s') . ' ' . php_uname('n'));
 
 const INCLUDE_BUYER_INTERMEDIATOR = true;
 

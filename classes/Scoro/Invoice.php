@@ -4,7 +4,6 @@ use DragonBe\Vies\Vies;
 use Exception;
 use ScoroMaventa\Finvoice\Finvoice;
 use ScoroMaventa\Finvoice\FinvoiceSettings;
-use ScoroMaventa\Mail;
 use ScoroMaventa\Maventa\MaventaAPI;
 use ScoroMaventa\Prh\PrhAPI;
 use ScoroMaventa\Verkkolaskuosoite\VerkkolaskuosoiteAPI;
@@ -34,16 +33,13 @@ class Invoice
 
         debug("Updated Id Code");
 
-        if (empty($buyerContactData->vatno)) {
+        $vatNo = self::getVatIdFromBusinessId($buyerContactData->id_code);
 
-            $vatNo = getVatIdFromBusinessId($buyerContactData->id_code);
-
-            if (self::vatNumberIsValid($vatNo)) {
-                $scoroApi->setContact($buyerContactData->contact_id, ['vatno' => $vatNo]);
-                $buyerContactData->vatno = $vatNo;
-            }
-
+        if (self::vatNumberIsValid($vatNo)) {
+            $scoroApi->setContact($buyerContactData->contact_id, ['vatno' => $vatNo]);
+            $buyerContactData->vatno = $vatNo;
         }
+
 
         debug("Updated Vat Code");
 
@@ -198,15 +194,6 @@ class Invoice
     }
 
     /**
-     * @param $businessId
-     * @return string|null
-     */
-    static function stripNonNumbers($businessId)
-    {
-        return preg_replace('/[^\d]/', '', $businessId);
-    }
-
-    /**
      * Moves the comment from subheading to buyer reference if there is exactly one comment line and it's the first line
      * @param object $invoice
      * @return bool
@@ -239,9 +226,13 @@ class Invoice
 
     static function getOvtFromBusinessId($businessId): string
     {
-        return '0037' . self::stripNonNumbers($businessId);
+        return '0037' . stripNonNumbers($businessId);
     }
 
+    static function getVatIdFromBusinessId($businessId): string
+    {
+        return 'FI' . stripNonNumbers($businessId);
+    }
 
 
 }

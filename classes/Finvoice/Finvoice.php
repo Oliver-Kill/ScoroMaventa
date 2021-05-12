@@ -17,7 +17,7 @@ class Finvoice
     public function __construct(FinvoiceSettings $settings)
     {
         $this->id = md5(rand() * time());
-        $this->settings = $settings;
+        $this->settings = replaceAmpersandWithHtmlEntityRecursively($settings);
         $this->xml = new SimpleXMLElement('<root/>');
         $this->timestamp = date('c');
 
