@@ -120,3 +120,33 @@ function stop($code, $data = false)
 
     exit(json_encode($response));
 }
+
+/**
+ * Returns true if Sentry DSN is set
+ * @return bool
+ */
+function sentryDsnIsSet(): bool
+{
+    if (SENTRY_DSN !== null) {
+        return true;
+    }
+    return false;
+}
+function debug($message)
+{
+    $data = date('[H:i:s] ') . $message;
+    file_put_contents('.debug/debug.log', $data."\n", FILE_APPEND);
+    echo inCli() ? $data : "<pre>".htmlentities($data)."</pre>"."\n";
+}
+function inCli(): bool
+{
+    return php_sapi_name() == "cli";
+}
+
+function disableHtmlErrorsWhenInCli()
+{
+    if (inCli()) {
+        ini_set('xdebug.cli_color', 1);
+        ini_set('html_errors', 0);
+    }
+}

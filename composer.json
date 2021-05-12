@@ -4,10 +4,14 @@
     "ext-mysqli": "*",
     "stichoza/google-translate-php": "^4.1",
     "ezyang/htmlpurifier": "^4.13",
-    "ext-json": "*"
+    "ext-json": "*",
+    "sentry/sdk": "^3.1",
+    "dragonbe/vies": "^2.2",
+    "ext-dom": "*"
   },
   "autoload": {
     "psr-4": {
+      "ScoroMaventa\\": "classes/",
       "App\\": [
         "system/classes/",
         "classes/App"

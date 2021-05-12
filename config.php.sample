@@ -1,5 +1,8 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+
 // Local configuration
 define('DATABASE_HOSTNAME', '127.0.0.1');
 define('DATABASE_USERNAME', 'root');
@@ -26,3 +29,40 @@ date_default_timezone_set('Europe/Tallinn');
 
 // In which language you have translatable phrases in the code
 define('DEFAULT_LANGUAGE', 'en');
+
+// Error reporting with Sentry
+const SENTRY_DSN = 'https://156fcb150a77475494af80a26fa7bab2@o585161.ingest.sentry.io/5737827';
+
+const INCLUDE_BUYER_INTERMEDIATOR = true;
+
+// Seller details
+const SELLER_ACCOUNT_ID = 'FI0817453000165102';
+const SELLER_BIC = 'NDEAFIHH';
+const SELLER_BUSINESS_ID = '2542584-9';
+const SELLER_TAX_CODE = 'FI25425849';
+const SELLER_ORGANISATION_NAME = 'Print World Oy';
+const SELLER_ORGANISATION_OPERATOR_OVT = '003721291126';
+define('SELLER_ORGANISATION_OVT', '0037' . stripNonNumbers(SELLER_BUSINESS_ID));
+
+// MaventaAPI
+//const MAVENTA_BASE_URL = 'https://ax-stage.maventa.com/'; // Production: https://ax.maventa.com/
+//const MAVENTA_BASE_URL = 'https://https-webhook-site-3.moesif.net/eyJhcHAiOiIzNjU6NDA5IiwidmVyIjoiMi4wIiwib3JnIjoiNjkwOjMxOSIsImlhdCI6MTYxOTgyNzIwMH0.iCpkV8aLSz3Tczpgwl28T7BcN2JJmZS1rPDqt2wf37c/f244cf71-ff72-46e7-86d4-e309d811d2bf/'; // Production: https://ax.maventa.com/
+const MAVENTA_BASE_URL = 'https://62895d9d59.to.intercept.rest'; // Production: https://ax.maventa.com/
+const MAVENTA_CLIENT_ID = '62f99c59-1b55-4444-9856-c847a44506da'; // https://testing.maventa.com/companies/settings -> Company UUID
+const MAVENTA_CLIENT_SECRET = 'c27f81ed-1ac2-4871-855b-3d27a6b0758a'; // https://testing.maventa.com/companies/settings -> API key
+const MAVENTA_SCOPE = 'invoice:send'; // https://github.com/vertaislaina/maventa-autoxchange#company_auth
+const MAVENTA_VENDOR_API_KEY = '1183539a-a0e3-4a8d-99b5-4c34a60a4009'; // https://testing.maventa.com/companies/partner_api_key_list -> API key
+
+const PHPMAILER_FROM_EMAIL = 'scoromaventa@printworld.fi';
+const PHPMAILER_FROM_NAME = 'Scoro<->Maventa';
+const PHPMAILER_TO_EMAIL = 'henno.taht@gmail.com';
+const PHPMAILER_TO_NAME = 'Henno Täht';
+const PHPMAILER_USE_SMTP = true;
+const PHPMAILER_SMTP_HOST = 'localhost';
+const PHPMAILER_SMTP_USERNAME = '';
+const PHPMAILER_SMTP_PASSWORD = '';
+const PHPMAILER_SMTP_PORT = 1025;
+const PHPMAILER_SMTP_AUTH = false;
+const PHPMAILER_SMTP_DEBUG = SMTP::DEBUG_OFF;
+const PHPMAILER_SMTP_ENCRYPTION_ENABLED = false;
+const PHPMAILER_SMTP_ENCRYPTION_TYPE = PHPMailer::ENCRYPTION_STARTTLS; // Or PHPMailer::ENCRYPTION_SMTPS

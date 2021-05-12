@@ -1,5 +1,9 @@
 <?php namespace App;
 
+use Sentry\State\Scope;
+use function Sentry\captureException;
+use function Sentry\configureScope;
+
 /**
  * Created by PhpStorm.
  * User: henno
@@ -282,6 +286,21 @@ class Application
 
         }
 
+    }
+
+    static function sendExceptionToSentry($e, string $dataName = null, $data = null)
+    {
+
+        $data ? self::setSentryScope($dataName, $data) : null;
+
+        captureException($e);
+    }
+
+    static function setSentryScope($dataName, $data)
+    {
+        configureScope(function (Scope $scope) use ($dataName, $data) {
+            $scope->setContext($dataName, (array)$data);
+        });
     }
 
 

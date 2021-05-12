@@ -47,22 +47,12 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link <?= $controller == 'welcome' ? 'class="active"' : '' ?>" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link <?= $controller == 'invoices' ? 'class="active"' : '' ?>" href="#">Invoices <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= $controller == 'admin' ? 'class="active"' : '' ?>" href="admin"><?= __('Admin') ?></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><?= __('Disabled') ?></a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="#"><?= __('Action') ?></a>
-                    <a class="dropdown-item" href="#"><?= __('Another action') ?></a>
-                    <a class="dropdown-item" href="#"><?= __('Something else here') ?></a>
-                </div>
-            </li>
+
         </ul>
         <?php require 'templates/partials/main_menu_right_side.php'?>
     </div>
