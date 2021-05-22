@@ -1,0 +1,1 @@
+This is a folder for files that help debugging network requests. 
