@@ -33,6 +33,15 @@ const SELLER_ORGANISATION_NAME = 'Print World Oy';
 const SELLER_ORGANISATION_OPERATOR_OVT = '003721291126';
 const SELLER_ORGANISATION_OVT = '003725425849';
 
+// SCORO
+const SCORO_BASE_URL = 'https://0593fb59cf.to.intercept.rest/'; // https://#companyname#.scoro.com/api/v2
+//const SCORO_BASE_URL = 'https://printworld.scoro.com/api/v2/'; // https://#companyname#.scoro.com/api/v2
+const SCORO_API_KEY = 'ScoroAPI_xxxxxxxxxxxxxxx'; // https://printworld.scoro.com/settings/integrations/api -> API KEY
+const SCORO_COMPANY_ACCOUNT_ID = 'printworld'; // https://printworld.scoro.com/settings/integrations/api -> company_account_id
+const SCORO_LANG = 'eng';
+const SCORO_USER_TOKEN = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+//define("SCORO_WEBHOOK_TARGET_URL", getBaseUrl() . 'sendInvoice.php');
+
 // MaventaAPI
 //const MAVENTA_BASE_URL = 'https://ax-stage.maventa.com/'; // Production: https://ax.maventa.com/
 //const MAVENTA_BASE_URL = 'https://https-webhook-site-3.moesif.net/eyJhcHAiOiIzNjU6NDA5IiwidmVyIjoiMi4wIiwib3JnIjoiNjkwOjMxOSIsImlhdCI6MTYxOTgyNzIwMH0.iCpkV8aLSz3Tczpgwl28T7BcN2JJmZS1rPDqt2wf37c/f244cf71-ff72-46e7-86d4-e309d811d2bf/'; // Production: https://ax.maventa.com/
