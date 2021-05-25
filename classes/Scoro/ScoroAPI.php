@@ -28,14 +28,23 @@ class ScoroAPI
     {
         $data = [
             "request" => new stdClass(),
-            "detailed_response" => true
+            "detailed_response" => true,
+            "per_page" => 25, // Scoro max is 25 when detailed_response is true
+            "page" => 1
         ];
 
         if (!empty($filter)) {
             $data['filter'] = $filter;
         }
 
-        return $this->http->post('invoices/list', ["json" => $data]);
+        $invoices = [];
+
+        while ($invoiceBatch = $this->http->post('invoices/list', ["json" => $data])) {
+            $data['page']++;
+            $invoices = array_merge($invoices, $invoiceBatch);
+        }
+
+        return $invoices;
     }
 
 //    /**
@@ -124,7 +133,7 @@ class ScoroAPI
             ]
         ]);
 
-        return empty($response->data) ? $response:$response->data;
+        return empty($response->data) ? $response : $response->data;
     }
 
     /**
@@ -134,7 +143,7 @@ class ScoroAPI
      */
     public function getContact($contactId): object
     {
-        if(empty($contactId)){
+        if (empty($contactId)) {
             throw new Exception("Invalid contact id");
         }
         return $this->http->post('contacts/view/' . $contactId, [

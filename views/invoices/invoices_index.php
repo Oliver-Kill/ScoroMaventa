@@ -35,9 +35,9 @@
             <thead>
             <tr>
                 <th></th>
-                <th><?= __('Date modified') ?></th>
                 <th class="center"><?= __('Number') ?></th>
                 <th class="center"><?= __('Date') ?></th>
+                <th class="center"><?= __('Modified') ?></th>
                 <th><?= __('Company') ?></th>
                 <th class="right"><?= __('Sum') ?></th>
                 <th></th>
@@ -50,9 +50,9 @@
             <?php $n = 1; foreach ($invoices as $invoice): ?>
                 <tr data-href="invoices/<?= $invoice->id ?>" data-id="<?= $invoice->id ?>" data-number="<?= $invoice->no ?>">
                     <td><?=$n++?></td>
-                    <td><?= strtr(substr($invoice->modified_date, 0, 16), 'T', ' ') ?></td>
                     <td class="center"><?= $invoice->no ?></td>
                     <td class="center"><?= substr($invoice->date, 0, 10) ?></td>
+                    <td class="center"><?= strtr(substr($invoice->modified_date, 0, 16), 'T', ' ') ?></td>
                     <td><?= $invoice->company_name ?></td>
                     <td class="right"><?= number_format($invoice->vat_sum + $invoice->sum, 2, ',', ' ')?></td></td>
                     <td><button type="button" class="btn btn-primary btn-send">Send</button></td>

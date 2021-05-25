@@ -84,7 +84,7 @@ class API
             }
             $body = json_decode($body);
 
-            return empty($body->data) ? $body : $body->data;
+            return isset($body->data) ? $body->data : $body;
 
         } catch (Exception $e) {
             debug("ERROR: " . $e->getMessage());

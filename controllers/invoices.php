@@ -12,14 +12,14 @@ class invoices extends Controller
         $scoroApi = new ScoroAPI();
 
         $this->invoices = $scoroApi->getInvoiceList([
-            "modified_date" => [
+            "created_date" => [
                 // 2021-05-10 means 2021-05-10 00:00:00!
-                "from_date" => date('Y-m-d', strtotime('today - 1 days')),
+                "from_date" => date('Y-m-d', strtotime('today - 14 days')),
                 "to_date" => date('Y-m-d', strtotime('today + 1 days'))
             ]
         ]);
         usort($this->invoices, function ($a, $b) {
-            return $b->modified_date <=> $a->modified_date;
+            return $b->created_date <=> $a->created_date;
         });
 
     }
