@@ -3,6 +3,8 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
+const FORCE_HTTPS = false; // Force HTTPS connections
+
 // Local configuration
 define('DATABASE_HOSTNAME', '127.0.0.1');
 define('DATABASE_USERNAME', 'root');
@@ -32,6 +34,7 @@ const SELLER_TAX_CODE = 'FI25425849';
 const SELLER_ORGANISATION_NAME = 'Print World Oy';
 const SELLER_ORGANISATION_OPERATOR_OVT = '003721291126';
 const SELLER_ORGANISATION_OVT = '003725425849';
+
 
 // SCORO
 const SCORO_BASE_URL = 'https://0593fb59cf.to.intercept.rest/'; // https://#companyname#.scoro.com/api/v2
