@@ -111,7 +111,7 @@ class PrhAPI extends API
             $response = $api->get("v1?totalResults=true&maxResults=999&resultsFrom=0&name=" . urlencode($businessName), $options);
 
             foreach ($response->results as $organisation) {
-                if (strtolower($businessName) == strtolower($organisation->name)) {
+                if (mb_strtolower($businessName, 'UTF-8') == mb_strtolower($organisation->name, 'UTF-8')) {
                     return new BusinessInformation($organisation);
                 }
             }
