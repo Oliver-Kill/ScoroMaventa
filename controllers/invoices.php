@@ -14,7 +14,7 @@ class invoices extends Controller
         $this->invoices = $scoroApi->getInvoiceList([
             "created_date" => [
                 // 2021-05-10 means 2021-05-10 00:00:00!
-                "from_date" => date('Y-m-d', strtotime('today - 44 days')),
+                "from_date" => date('Y-m-d', strtotime('today - 14 days')),
                 "to_date" => date('Y-m-d', strtotime('today + 1 days'))
             ]
         ]);
