@@ -50,10 +50,6 @@ function ajax(url, options, callback_or_redirect_url, error_callback) {
 
             if (json === false) {
 
-                // Send error report
-                $.post('email/send_error_report', {
-                    javascript_received_json_payload_that_caused_the_error: response
-                });
 
                 if (typeof error_callback === 'function') {
                     error_callback(response);
@@ -65,11 +61,6 @@ function ajax(url, options, callback_or_redirect_url, error_callback) {
 
 
             } else if (json.status === 500) {
-
-                // Send error report
-                $.post('email/send_error_report', {
-                    javascript_received_json_payload_that_caused_the_error: json
-                });
 
 
                 if (typeof error_callback === 'function') {

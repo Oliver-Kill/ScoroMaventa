@@ -1,6 +1,6 @@
 <?php namespace App;
 
-use ScoroMaventa\Scoro\Invoice;
+use ScoroMaventa\App\Invoice;
 use ScoroMaventa\Scoro\ScoroAPI;
 
 class invoices extends Controller
@@ -14,7 +14,7 @@ class invoices extends Controller
         $this->invoices = $scoroApi->getInvoiceList([
             "created_date" => [
                 // 2021-05-10 means 2021-05-10 00:00:00!
-                "from_date" => date('Y-m-d', strtotime('today - 14 days')),
+                "from_date" => date('Y-m-d', strtotime('today - 44 days')),
                 "to_date" => date('Y-m-d', strtotime('today + 1 days'))
             ]
         ]);
@@ -38,10 +38,8 @@ class invoices extends Controller
             stop(400, 'Invalid invoice_id');
         }
         $scoroApi = new ScoroAPI();
-        $invoiceData = $scoroApi->getInvoice($_POST['invoice_id']);
         //file_put_contents('.debug/testInvoice.json', json_encode($invoiceData));
-        //$invoiceData = json_decode(file_get_contents('.debug/testInvoice.json'));
-        Invoice::send($invoiceData);
+        Invoice::send($scoroApi->getInvoice($_POST['invoice_id']));
         stop(200, 'Successfully sent e-invoice');
 
     }

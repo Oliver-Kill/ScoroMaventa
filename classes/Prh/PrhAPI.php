@@ -1,5 +1,6 @@
 <?php namespace ScoroMaventa\Prh;
 
+use App\Application;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -25,43 +26,6 @@ class PrhAPI extends API
     }
 
     /**
-     * Check that business id is formated correctly and checksum matches.
-     *
-     * @param string $businessId
-     * @return boolean
-     */
-    public static function isValidFinnishBusinessId(string $businessId)
-    {
-
-        if (self::isValidBusinessId($businessId) == false) {
-            return false;
-        }
-
-        // Remove all except numbers
-        $businessId = preg_replace('/[^0-9]/', '', $businessId);
-
-        // Some old business ids may have just 6 numbers + checksum
-        $businessId = str_pad($businessId, 8, "0", STR_PAD_LEFT);
-
-        // Calculate checksum
-        $multipliers = [7, 9, 10, 5, 8, 4, 2];
-        $checksum = 0;
-        foreach (str_split($businessId) as $k => $v) {
-            if (isset($multipliers[$k]) == false) break;
-
-            $checksum += ((int)$v * $multipliers[$k]);
-        }
-        $checksum = $checksum % 11;
-
-        if ($checksum == 1) return false;
-        if ($checksum > 1) {
-            $checksum = 11 - $checksum;
-        }
-
-        return (substr($businessId, -1) == $checksum);
-    }
-
-    /**
      * Lookup business information from Finnish Patent and Registration Office using Finnish business id.
      *
      * Method accepts Finnish business id in following formats:
@@ -76,21 +40,27 @@ class PrhAPI extends API
      */
     public static function findByBusinessId(string $businessId, array $options = [])
     {
-        if (self::isValidFinnishBusinessId($businessId) == false) {
+        if (BusinessId::isValid($businessId) == false) {
             throw new InvalidArgumentException("$businessId is not a valid Finnish business id.");
         }
 
         try {
             $response = API::getInstance(self::baseUrl)->get("v1/" . urlencode($businessId), $options);
-        } catch (ClientException $e) {
-            if ($e->getResponse()->getStatusCode() === 404) {
-                throw new Exception("A business with a business id $businessId was not found from ". self::baseUrl .". Make sure business id is correct.");
+        } catch (Exception $e) {
+            if ($e instanceof \GuzzleHttp\Exception\ClientException && $e->getResponse()->getStatusCode() === 404) {
+                self::throw404BusinessIdNotFound($businessId);
+            } else {
+                // There was unknown error with the Prh service. Fail silently so that sending can continue but report failure to Sentry
+                if (sentryDsnIsSet()) {
+                    Application::sendExceptionToSentry($e, 'businessId', $businessId);
+                }
             }
         }
 
         if (!isset($response->results[0])) {
             throw new Exception("Invalid response from Finnish Patent and Registration Office API");
         }
+        debug("PRH: found organization by business id: " . $response->results[0]->name);
         return new BusinessInformation($response->results[0]);
 
     }
@@ -105,23 +75,43 @@ class PrhAPI extends API
     public static function findByName($businessName, array $options = [])
     {
 
-        $api = new API('https://avoindata.prh.fi/bis/');
+        $api = new API(self::baseUrl);
 
         try {
             $response = $api->get("v1?totalResults=true&maxResults=999&resultsFrom=0&name=" . urlencode($businessName), $options);
 
             foreach ($response->results as $organisation) {
-                if (mb_strtolower($businessName, 'UTF-8') == mb_strtolower($organisation->name, 'UTF-8')) {
+                if (mb_strtolower($businessName, 'UTF-8') == mb_strtolower($organisation->name, 'UTF-8')
+                    || mb_strtolower($businessName, 'UTF-8') . ' oy' == mb_strtolower($organisation->name, 'UTF-8')) {
+                    debug("PRH: found by name: " . $organisation);
                     return new BusinessInformation($organisation);
                 }
             }
         } catch (ClientException $e) {
             if ($e->getCode() === 404) {
-                throw new Exception("Unable to send e-invoice because the Finnish Business Information System does not have information about a company named " . $businessName);
+                self::throw404BusinessNameNotFound($businessName);
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param string $businessId
+     * @throws PrhBusinessNotFoundException
+     */
+    private static function throw404BusinessIdNotFound(string $businessId): void
+    {
+        throw new PrhBusinessNotFoundException("The Finnish Business Information System does not have information about a company with a Y-tunnus of $businessId.", 404);
+    }
+
+    /**
+     * @param $businessName
+     * @throws Exception
+     */
+    private static function throw404BusinessNameNotFound($businessName): void
+    {
+        throw new PrhBusinessNotFoundException("The Finnish Business Information System does not have information about a company named " . $businessName . ".", 404);
     }
 
 }

@@ -99,7 +99,7 @@ class ScoroAPI
             ]
         ]);
 
-        return $response->data ?? $response;
+        return new ScoroInvoice($response);
     }
 
     /**
@@ -138,19 +138,19 @@ class ScoroAPI
 
     /**
      * @param $contactId
-     * @return object
-     * @throws Exception|GuzzleException
+     * @return ScoroContact
+     * @throws GuzzleException
      */
     public function getContact($contactId): object
     {
         if (empty($contactId)) {
             throw new Exception("Invalid contact id");
         }
-        return $this->http->post('contacts/view/' . $contactId, [
+        return new ScoroContact($this->http->post('contacts/view/' . $contactId, [
             "json" => [
                 "request" => new stdClass()
             ]
-        ]);
+        ]));
     }
 
     /**

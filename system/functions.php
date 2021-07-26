@@ -127,19 +127,21 @@ function stop($code, $data = false)
  */
 function sentryDsnIsSet(): bool
 {
-    if (SENTRY_DSN !== null) {
-        return true;
+    if (!defined('SENTRY_DSN') || empty(SENTRY_DSN)) {
+        return false;
     }
-    return false;
+    return true;
 }
+
 function debug($message)
 {
     $data = date('[H:i:s] ') . $message;
-    file_put_contents('.debug/debug.log', $data."\n", FILE_APPEND);
+    file_put_contents('.debug/debug.log', $data . "\n", FILE_APPEND);
     if (SHOW_DEBUGGING_MESSAGES) {
         echo inCli() ? $data : "<pre>" . htmlentities($data) . "</pre>" . "\n";
     }
 }
+
 function inCli(): bool
 {
     return php_sapi_name() == "cli";
@@ -161,14 +163,14 @@ function replaceAmpersandWithHtmlEntityRecursively(&$array)
             if (is_object($array->$key) || is_array($array->$key)) {
                 $array->$key = replaceAmpersandWithHtmlEntityRecursively($array->$key);
             } else {
-                $array->$key = str_replace('&', '&amp;', $value);
+                if (is_string($value)) $array->$key = str_replace('&', '&amp;', $value);
             }
 
         } elseif (is_array($array)) {
             if (is_object($array[$key]) || is_array($array[$key])) {
                 $array[$key] = replaceAmpersandWithHtmlEntityRecursively($array[$key]);
             } else {
-                $array[$key] = str_replace('&', '&amp;', $value);
+                if (is_string($value)) $array[$key] = str_replace('&', '&amp;', $value);
             }
         }
     }

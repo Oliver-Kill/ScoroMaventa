@@ -1,6 +1,6 @@
 <?php namespace App;
 
-use ScoroMaventa\Mail;
+use ScoroMaventa\API;
 use function Sentry\init;
 
 // Init composer auto-loading
@@ -31,11 +31,16 @@ if (sentryDsnIsSet()) {
 
 // Load app
 try {
+    API::truncateLastRequestDebugFile();
     $app = new Application;
 } catch (\Exception $e) {
     debug("ERROR: " . $e->getMessage());
-    Application::sendExceptionToSentry($e);
-    debug("Sent error to Sentry");
-    Mail::send('Application error: ' . $e->getMessage(), json_encode($e));
+    if (sentryDsnIsSet()) {
+        Application::sendExceptionToSentry($e, 'GuzzleDebug', [file_get_contents(API::debugFileLocation)]);
+        debug("Sent error to Sentry");
+        if (Request::isAjax()){
+            stop(500, $e->getMessage());
+        }
+    }
     exit();
 }

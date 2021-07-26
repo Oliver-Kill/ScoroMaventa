@@ -56,7 +56,7 @@ class API
     function send($endpoint, $method, $options)
     {
 
-        $options['debug'] = fopen(self::debugFileLocation, 'w+');
+        $options['debug'] = fopen(self::debugFileLocation, 'w');
 
         if (!empty($this->authenticationHeader)) {
             $options['headers'][key($this->authenticationHeader)] = current($this->authenticationHeader);
@@ -68,30 +68,23 @@ class API
             }
         }
 
-        try {
-            $response = $this->client->request($method, $endpoint, $options);
-            $statusCode = $response->getStatusCode();
-            $body = (string)$response->getBody();
-            if ($statusCode > 299) {
-                throw new Exception("$method {$this->baseUrl}$endpoint request was not successful ($statusCode). $body");
-            }
-            if (self::bodyIsNotJson($response)) {
-                throw new Exception("$method {$this->baseUrl}$endpoint response was not JSON ($body)");
-            }
-            if (!empty($this->validationFunction)) {
-                $validationFunction = $this->validationFunction;
-                $validationFunction(json_decode($body));
-            }
-            $body = json_decode($body);
-
-            return isset($body->data) ? $body->data : $body;
-
-        } catch (Exception $e) {
-            debug("ERROR: " . $e->getMessage());
-            Application::sendExceptionToSentry($e, 'Guzzle  debug', [file_get_contents(self::debugFileLocation)]);
-            debug("Sent error to Sentry");
-            exit();
+        $response = $this->client->request($method, $endpoint, $options);
+        $statusCode = $response->getStatusCode();
+        $body = (string)$response->getBody();
+        if ($statusCode > 299) {
+            throw new Exception("$method {$this->baseUrl}$endpoint request was not successful ($statusCode). $body");
         }
+        if (self::bodyIsNotJson($response)) {
+            throw new Exception("$method {$this->baseUrl}$endpoint response was not JSON ($body)");
+        }
+        if (!empty($this->validationFunction)) {
+            $validationFunction = $this->validationFunction;
+            $validationFunction(json_decode($body));
+        }
+        $body = json_decode($body);
+
+        return isset($body->data) ? $body->data : $body;
+
 
     }
 
@@ -141,6 +134,14 @@ class API
     function authenticateByApiKey(array $authenticationParameters)
     {
         $this->authenticationParameters = $authenticationParameters;
+    }
+
+    /**
+     * @return false|int
+     */
+    public static function truncateLastRequestDebugFile()
+    {
+        return file_put_contents(API::debugFileLocation, '');
     }
 
 }

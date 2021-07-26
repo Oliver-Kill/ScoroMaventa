@@ -9,7 +9,7 @@ const FORCE_HTTPS = false; // Force HTTPS connections
 define('DATABASE_HOSTNAME', '127.0.0.1');
 define('DATABASE_USERNAME', 'root');
 define('DATABASE_PASSWORD', '');
-define('DATABASE_DATABASE', 'halo');
+define('DATABASE_DATABASE', 'scoroMaventa');
 
 // Make sure timestamps are correct
 date_default_timezone_set('Europe/Tallinn');
@@ -18,7 +18,7 @@ date_default_timezone_set('Europe/Tallinn');
 define('DEFAULT_LANGUAGE', 'en');
 
 // For debug
-const SHOW_DEBUGGING_MESSAGES = false;
+const SHOW_DEBUGGING_MESSAGES = true;
 
 // Error reporting with Sentry
 const SENTRY_DSN = 'https://156fcb150a77475494af80a26fa7bab2@o585161.ingest.sentry.io/5737827';
@@ -34,6 +34,10 @@ const SELLER_TAX_CODE = 'FI25425849';
 const SELLER_ORGANISATION_NAME = 'Print World Oy';
 const SELLER_ORGANISATION_OPERATOR_OVT = '003721291126';
 const SELLER_ORGANISATION_OVT = '003725425849';
+const SELLER_STREET_NAME = "Koivukummuntie 14";
+const SELLER_TOWN_NAME = "VANTAA";
+const SELLER_POSTCODE_IDENTIFIER = "01510";
+const SELLER_PHONE_NUMBER_IDENTIFIER = "+358207301630";
 
 
 // SCORO

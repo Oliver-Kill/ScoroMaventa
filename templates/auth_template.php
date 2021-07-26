@@ -110,6 +110,7 @@
 </div>
 <!-- /container -->
 
+<?php require 'templates/partials/sentry.php'; ?>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
